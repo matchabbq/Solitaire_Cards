@@ -13,12 +13,12 @@ const int Diamond = 3;
 
 // spider_init_stacks(s) initializes all
 // the stacks in the spider struct, and returns the spider struct.
-static struct spider* spider_init_stacks(void) {
-	struct spider* s = (spider*)malloc(sizeof(struct spider));
+static struct spider * spider_init_stacks(void) {
+	struct spider* s = new (struct spider);
 	s->stock = stack_create();
 	for (int i = 0; i < 10; i++) {
-		s->tableau_down[i] = (stack*)malloc(sizeof(struct stack));
-		s->tableau_up[i] = (stack*)malloc(sizeof(struct stack));
+		s->tableau_down[i] = new(stack);
+		s->tableau_up[i] = new(stack);
 	}
 	s->stock_size = 5;
 	s->comp_decks = 0;
@@ -37,13 +37,14 @@ static struct spider* spider_init_stacks(void) {
 //           length of card_count is 52.
 static struct card get_random_card(int card_count[]) {
 	assert(card_count);
-
+	
 	int card_random = rand() % CARD_COUNT_SIZE + 1;
 	while (card_count[card_random - 1] == 0) {
 		card_random = rand() % CARD_COUNT_SIZE + 1;
 	}
 	int suit = (card_random - 1) / 13;
-	struct card rv = { card_random,0 };
+	int cardnum = (card_random-1) % 13 + 1;
+	struct card rv = {cardnum,0};
 	if (suit == Spade) {
 		rv.suit = 'S';
 	}
@@ -57,6 +58,21 @@ static struct card get_random_card(int card_count[]) {
 		rv.suit = 'D';
 	}
 	return rv;
+}
+
+int suit_to_num(char s) {
+	if (s == 'S') {
+		return 0;
+	}
+	else if (s == 'H') {
+		return 1;
+	}
+	else if (s == 'C') {
+		return 2;
+	}
+	else {
+		return 3;
+	}
 }
 
 // init_tableau(s,index,num_down,num_up,card_count)
@@ -86,12 +102,12 @@ static void init_tableau(struct spider* s,
 	for (int i = 0; i < num_down; i++) {
 		struct card random_card = get_random_card(card_count);
 		stack_push(s->tableau_down[index], random_card);
-		card_count[random_card.suit * 10 + random_card.num - 1] -= 1;
+		card_count[(suit_to_num(random_card.suit) + 1) * 13 + random_card.num - 1] -= 1;
 	}
-	for (int i = 0; i < num_up; i++) {
+	for (int i = 0; i < num_up; i++){
 		struct card random_card = get_random_card(card_count);
 		stack_push(s->tableau_up[index], random_card);
-		card_count[random_card.suit * 10 + random_card.num - 1] -= 1;
+		card_count[(suit_to_num(random_card.suit) + 1) * 13 + random_card.num - 1] -= 1;
 	}
 }
 
@@ -99,8 +115,8 @@ struct spider* spider_init_random(int level, int seed) {
 	assert(level == 1 || level == 2 || level == 3);
 	struct spider* s;
 	const int STOCK_SIZE_INITIAL = 50;
-
-	int card_count[51] = { 0 };
+	
+	int card_count[52] = { 0 };
 	int deck_size = 0;
 	int deck_count = 0;
 	if (level == 1) {
@@ -130,7 +146,7 @@ struct spider* spider_init_random(int level, int seed) {
 	for (int i = 0; i < STOCK_SIZE_INITIAL; i++) {
 		struct card random_card = get_random_card(card_count);
 		stack_push(s->stock, random_card);
-		card_count[random_card.suit * 10 + random_card.num - 1] -= 1;
+		card_count[(suit_to_num(random_card.suit)+1) * 13 + random_card.num - 1] -= 1;
 	}
 
 	// init the tableaus
