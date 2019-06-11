@@ -4,10 +4,22 @@
 #include <string.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <iostream>
 
-struct card;
+//#ifndef, #define and #endif prevents redefinition of structures
+#ifndef card_stack_struct
+#define card_stack_struct
+struct card {
+	int num;
+	char suit;
+};
 
-struct stack;
+struct stack {
+	struct card* content;
+	int len;
+	int cap;
+};
+#endif
 
 struct stack* stack_create(void);
 
