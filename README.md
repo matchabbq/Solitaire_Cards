@@ -1,10 +1,7 @@
 # Solitaire_Cards
 Solitaire cards based on MS traditional Solitaire Cards Game.
 
-Hihi
-hello kevin
-
-lichen is here with Kevin
+Codes finished and tested with single suit game. - Kevin 6/13/2019 8:23 PM
 
 Introduction
   This game have level 1 - 3 to choose.
