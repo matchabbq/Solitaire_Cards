@@ -5,6 +5,7 @@
 #include "Spider.h"
 #include <string>
 #include <iostream>
+#include "Tests.h"
 
 // check_initialized (initialized) checks the flag and returns an error
 // message if the game is not initialized
@@ -19,7 +20,8 @@ void check_initialized(int initialized) {
 int main() {
 	// Run test of stack.cpp module
 	stack_test();
-
+	spider_test_find_seq();
+	std::cout << "Type \"HELP\" to read game commands." << std::endl;
 	struct spider* s = NULL;
 
 	int initialized = 0;
@@ -34,7 +36,9 @@ int main() {
 			// Input 2 more int
 			std::cin >> seed;
 			std::cin >> level;
-			spider_init_random(level, seed);
+		//	std::cout << "HI";
+			s = spider_init_random(level, seed);
+		//	std::cout << "HI";
 			spider_print(s);
 			initialized += 1;
 		}
@@ -46,7 +50,7 @@ int main() {
 				break;
 			}
 			else {
-				std::cout << "You have not won yet, keep playing or input \"quit\" to quit." << std::endl;
+				std::cout << "You have not won yet, keep playing or input \"QUIT\" to quit." << std::endl;
 			}
 		}
 		else if (cmd == "PRINT") {
@@ -87,11 +91,24 @@ int main() {
 		else if (cmd == "QUIT"){
 			break;
 		}
+		else if (cmd == "HELP") {
+			std::cout << "Game Commands:" << std::endl << std::endl;
+			std::cout << "1. INIT: + seed(int) + level(int): Choose random seed and choose level." << std::endl;
+			std::cout << "	Level 1: Single suit" << std::endl;
+			std::cout << "	Level 2: Double suits" << std::endl;
+			std::cout << "	Level 3: Full suits" << std::endl;
+			std::cout << "2. WON: Tells if you have won or not." << std::endl;
+			std::cout << "3. PRINT: Print current game." << std::endl;
+			std::cout << "4. GETSTOCK: Distribute  10 cards from stock." << std::endl;
+			std::cout << "5. MOVE: + source tableau(int) + suit(char) + number (i) + destination tableau(int):" << std::endl;
+			std::cout << "	Move a sequence of cards starting from chosen card, from source tableau to destination tableau." << std::endl;
+			std::cout << "6. QUIT: Quit the game. The game will not be saved." << std::endl;
+			std::cout << "7. HELP: Open game commands helper log." << std::endl;
+		}
 		else {
 			std::cout << "Invalid Command = ";
 			std::cout << cmd << std::endl;
-			std::cout << "Stopping Program" << std::endl;
-			exit(1);
+			std::cout << "Enter \"QUIT\" to quit the game." << std::endl;
 		}
 	}
 }
