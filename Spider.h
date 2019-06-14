@@ -1,16 +1,9 @@
-#pragma once
 #include "Stack.h"
-struct card {
-	int num;
-	char suit;
-};
+#include <iostream>
+#include <sstream>
 
-struct stack {
-	struct card* content;
-	int len;
-	int cap;
-};
-
+#ifndef spider_struct
+#define spider_struct
 struct spider {
 	struct stack* stock;
 	struct stack* tableau_down[10];
@@ -18,7 +11,7 @@ struct spider {
 	int stock_size;
 	int comp_decks;
 };
-
+#endif
 extern const int Spade;
 extern const int Heart;
 extern const int Club;
@@ -36,7 +29,7 @@ struct spider* spider_init_random(int level, int seed);
 // spider_has_won(s) returns true if the player has won the game
 // i.e. the foundation piles contain 8 complete decks of 13 cards
 // and returns false otherwise.
-bool spider_has_won(const struct spider* s);
+bool spider_has_won(const spider* s);
 
 
 // read_card(card_read) reads at most two characters representing
@@ -48,20 +41,20 @@ bool spider_has_won(const struct spider* s);
 // If an error occurs reading in the value, the function
 // prints out an error message and terminates the program.
 // effects: reads input and modifies *card_read
-bool read_card(int* card_read);
+bool read_card(card* card_read);
 
 // spider_print(s) prints out the statue of the game including
 // the number of cards left in the stock pile
 // the face-down and face-up cards in each tableau pile
 // the number of complete decks in the foundation piles
 // effects: produces output
-void spider_print(struct spider* s);
+void spider_print(spider* s);
 
 
 // spider_get_stock(s) removes 10 cards from the stock pile
 // and places 1 card face-up on top of each tableau pile.
 // effects: may produce output and may mutate *s
-void spider_get_stock(struct spider* s);
+void spider_get_stock(spider* s);
 
 // spider_find_seq(s_src_up,temp,card) attempts
 // to find a descending sequence of cards starting 
@@ -76,10 +69,40 @@ void spider_get_stock(struct spider* s);
 // requires: s_src_up is non-empty.
 //           s_src_up and temp are valid pointers.
 //           1 <= card <= 13
-bool spider_find_seq(struct stack* s_src_up,
-	struct stack* temp,
-	int card);
+bool spider_find_seq(stack* s_src_up,
+	 stack* temp,
+	card card);
 
 // spider_test_find_seq() tests the find seq helper function
 // using assertion testing
 void spider_test_find_seq(void);
+
+// cardcmp compares if two cards are the same.
+bool cardcmp(card c1, card c2);
+
+// move_back (temp, origin) moves the items in temp back into origin, in reverse
+// order
+// require: temp, origin are valid
+// effect: modifies *temp and *origin.
+void move_back(stack* temp, stack* origin);
+
+// check_flip (s) checks whether we should flip a card for any of the column,
+// and flips if when needed
+// requires: s is valid
+// effect: may mutate any tableau_down
+void check_flip(spider* s);
+
+// check_remove (s, dest) checks if the dest tableau has a full set, and removes
+// it if there is.
+// requires: s is valid
+//           dest <= 9 and dest >= 0
+// effect: may mutate tableau_down [dest] and s->comp_decks
+void check_remove(spider* s, int dest);
+
+
+// spider_move(s, src, card, dest) attempts to move a sequence
+// of cards from the src tableau pile to the dest tableau pile.
+// The bottom card in the sequence must have the provided card
+// number.  Otherwise, it displays an error message.
+// effects: produces output and may mutate *s
+void spider_move(spider* s, int src, card c, int dest);
