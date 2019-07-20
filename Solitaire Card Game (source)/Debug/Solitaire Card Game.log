@@ -1,0 +1,3 @@
+﻿  Solitaire Card Game.c
+C:\Study\Spring 2019 CS\VS Code test\Solitaire Card Game\Solitaire Card Game.c(7): warning C4013: 'printf' undefined; assuming extern returning int
+  Solitaire Card Game.vcxproj -> C:\Study\Spring 2019 CS\VS Code test\Solitaire Card Game\Debug\Solitaire Card Game.exe
