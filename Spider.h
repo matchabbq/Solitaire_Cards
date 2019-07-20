@@ -17,6 +17,8 @@ extern const int Heart;
 extern const int Club;
 extern const int Diamond;
 
+// suit_to_num(char) converts a suit to its number (0 - 3).
+int suit_to_num(char);
 
 // spider_init_random(s, seed) randomly initializes
 // a valid beginning of a spider game by mutating *s
